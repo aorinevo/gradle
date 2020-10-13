@@ -25,9 +25,12 @@ public class MediumChildMap<T> extends AbstractListChildMap<T> {
 
     @Override
     protected Entry<T> findEntryWithPrefix(VfsRelativePath relativePath, CaseSensitivity caseSensitivity) {
-        for (Entry<T> child : children) {
-            if (relativePath.hasPrefix(child.getPath(), caseSensitivity)) {
-                return child;
+        // Use an indexed loop to avoid creating the iterator
+        //noinspection ForLoopReplaceableByForEach
+        for (int i = 0; i < children.size(); i++) {
+            Entry<T> entry = children.get(i);
+            if (relativePath.hasPrefix(entry.getPath(), caseSensitivity)) {
+                return entry;
             }
         }
         return null;
